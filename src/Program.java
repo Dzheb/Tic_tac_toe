@@ -113,72 +113,72 @@ public class Program {
         while (!isCellEmpty(x, y));
         field[x][y] = DOT_AI;
     }
-    /** Проверка строк и столбцов */
+    /** Проверка строк и столбцов
+     * @param c
+     * @return true в случае победы иначе false
+     */
     static boolean checkLines(char c) {
-        int colCounter = 0;
-        int rowCounter = 0;
+
         for (int col=0; col< fieldSizeX; col++) {
+            int colCounter = 0;
+            int rowCounter = 0;
             for (int row=0; row<fieldSizeY; row++) {
-                if (field[col][row] == c) colCounter++;
-                if (field[row][col] == c) rowCounter++;
-            }
+                if (field[col][row] == c) rowCounter++;
+                if (field[row][col] == c) colCounter++;
+           }
             // Проверка колонки и столбца на наличие победы
-            if (colCounter >= WIN_COUNT || rowCounter >= WIN_COUNT) return true;
-        }
+                if (rowCounter >= WIN_COUNT || colCounter >= WIN_COUNT) return true;
+            }
         return false;
     }
-    /** Проверка диагонали */
-    static boolean checkDiagonal(char c, int x, int y) {
-        int rightdownCounter = 0;
-        int leftdownCounter = 0;
+    /** Проверка диагоналей
+     * @param c
+     * @return true в случае победы иначе false
+     **/
+    static boolean checkDiagonal(char c) {
+        // проверка пересекающихся в центре диагоналей
+        int rightdownCounter1 = 0;
+        int leftdownCounter1 = 0;
         for (int i=0; i< fieldSizeX; i++) {
-            if (field[i][i] == c) rightdownCounter++;
-            if (field[fieldSizeY-i-1][i] == c) leftdownCounter++;
-            if (rightdownCounter >= WIN_COUNT || leftdownCounter >= WIN_COUNT) return true;
+            if (field[i][i] == c) rightdownCounter1++;
+            if (field[fieldSizeY-i-1][i] == c) leftdownCounter1++;
+            if (rightdownCounter1 >= WIN_COUNT || leftdownCounter1 >= WIN_COUNT)
+            {System.out.println("diagonal1");
+            return true;}
+        }
+        // смещение окна проверки на ячейку вниз
+        int rightdownCounter2 = 0;
+        int leftdownCounter2 = 0;
+        for (int i=0; i< WIN_COUNT; i++) {
+            if (field[i][i+1] == c) rightdownCounter2++;
+            if (field[fieldSizeY-i-1][i+1] == c) leftdownCounter2++;
+            if (rightdownCounter2 >= WIN_COUNT || leftdownCounter2 >= WIN_COUNT)
+            {System.out.println("diagonal2");
+                return true;}
+        }
+
+        // смещение окна проверки на ячейку вправо
+        int rightdownCounter3 = 0;
+        int leftdownCounter3 = 0;
+        for (int i=0; i< WIN_COUNT; i++) {
+            if (field[i+1][i] == c) rightdownCounter3++;
+            if (field[fieldSizeY-i-1][i] == c) leftdownCounter3++;
+            if (rightdownCounter3 >= WIN_COUNT || leftdownCounter3 >= WIN_COUNT)
+            {System.out.println("diagonal3");
+                return true;}
         }
 
         return false;
     }
     /**
      * Проверка победы
-     * TODO: Переработать метод в домашнем задании
      * @param c
-     * @return
+     * @return true в случае победы иначе false
      */
     static boolean checkWin(char c){
-        boolean checkedLines = checkLines(c) || checkLines(c);
-        boolean checkedDiagonal1 = checkDiagonal(c,0,0);
-        boolean checkedDiagonal2 = checkDiagonal(c,1,0);
-        boolean checkedDiagonal3 = checkDiagonal(c,0,1);
-        boolean checkedDiagonal4 = checkDiagonal(c,1,1);
-        boolean checkDiagonals = checkDiagonal(c,0,0);
-        if(checkDiagonals || checkedLines) {
+        if(checkDiagonal(c) || checkLines(c)) {
             return true;
         }
-
-//        if(checkedLines) {
-//            return true;
-//        }
-//        return checkLines(c,0) || checkLines(c,shift) || checkDiagonal(c,0,0) ||
-//                checkDiagonal(c,1,0) || checkDiagonal(c,0,1) || checkDiagonal(c,1,1);
-
-        // Проверка по 4 горизонталям
-//        if (field[0][0] == c && field[0][1] == c && field[0][2] == c && field[0][3] == c) return true;
-//        if (field[1][0] == c && field[1][1] == c && field[1][2] == c && field[1][3] == c) return true;
-//        if (field[2][0] == c && field[2][1] == c && field[2][2] == c && field[2][3] == c) return true;
-//        if (field[3][0] == c && field[3][1] == c && field[3][2] == c && field[3][3] == c) return true;
-
-        // Проверка по диагоналям
-        // сверху слева --- вниз направо
-        //if (field[0][0] == c && field[1][1] == c && field[2][2] == c && field[3][3] == c) return true;
-        // сверху справа --- вниз налево
-        //if (field[0][3] == c && field[1][2] == c && field[2][1] == c && field[3][0] == c) return true;
-        // Проверка по 4 вертикалям
-        // if (field[0][0] == c && field[1][0] == c && field[2][0] == c && field[3][0] == c) return true;
-        // if (field[0][1] == c && field[1][1] == c && field[2][1] == c && field[3][1] == c) return true;
-//        if (field[0][2] == c && field[1][2] == c && field[2][2] == c && field[3][2] == c) return true;
-//        if (field[0][3] == c && field[1][3] == c && field[2][3] == c && field[3][3] == c) return true;
-
         return false;
     }
 
@@ -213,5 +213,4 @@ public class Program {
         return false; // Игра продолжается
     }
 
-// end program
     }
